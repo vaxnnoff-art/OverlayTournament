@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overlay Scoreboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap');
+
+    body {
+      margin: 0;
+      background: transparent;
+      font-family: 'Rajdhani', sans-serif;
+      color: white;
+      font-size: 2.5em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .scoreboard {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+
+    .player {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-transform: uppercase;
+    }
+
+    .name {
+      font-size: 1em;
+      letter-spacing: 1px;
+    }
+
+    .score {
+      font-size: 1.5em;
+      color: #00bfff;
+    }
+
+    .vs {
+      font-size: 1em;
+      color: #ff4444;
+    }
+  </style>
+</head>
+<body>
+  <div class="scoreboard">
+    <div class="player" id="player1">
+      <div class="name">Joueur 1</div>
+      <div class="score">0</div>
+    </div>
+    <div class="vs">VS</div>
+    <div class="player" id="player2">
+      <div class="name">Joueur 2</div>
+      <div class="score">0</div>
+    </div>
+  </div>
+
+  <script>
+    async function update() {
+      try {
+        const res = await fetch("data.json?cachebust=" + Date.now());
+        const data = await res.json();
+        document.querySelector('#player1 .name').textContent = data.player1.name;
+        document.querySelector('#player2 .name').textContent = data.player2.name;
+        document.querySelector('#player1 .score').textContent = data.player1.score;
+        document.querySelector('#player2 .score').textContent = data.player2.score;
+      } catch (err) {
+        console.error("Erreur de chargement des données", err);
+      }
+    }
+
+    update();
+    setInterval(update, 5000);
+  </script>
+</body>
+</html>
