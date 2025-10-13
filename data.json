@@ -1,5 +1,5 @@
 {
-   "player1": {"name": "EnriqueAlz", "score": 2, "visible": true},
+   "player1": {"name": "EnriqueAlz", "score": 2, "visible": false},
   "player2": {"name": "KevKev_03", "score": 1, "visible": false},
   "vs": {"visible": false}
 }
