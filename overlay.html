@@ -5,25 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Overlay Scoreboard</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
     body {
       margin: 0;
       background: transparent;
-      font-family: 'Rajdhani', sans-serif;
+      font-family: 'Orbitron', sans-serif;
       color: white;
-      font-size: 2.5em;
+      font-size: 2em;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
 
+    /* CONTENEUR PRINCIPAL */
+    .overlay-container {
+      display: flex;
+      flex-direction: column; /* changer en row si tu veux horizontal */
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* SCOREBOARD */
     .scoreboard {
       display: flex;
       align-items: center;
       gap: 40px;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.5);
       padding: 20px 40px;
       border-radius: 20px;
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
@@ -43,58 +52,73 @@
 
     .score {
       font-size: 1.5em;
-      color: #ffffff;
+      color: #FFD700;
     }
 
     .vs {
       font-size: 1em;
-      color: #ff4444;
+      color: #FF4444;
+    }
+
+    /* WIDGET BATTLEFY */
+    .battlefy-widget iframe {
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      width: 800px;
+      height: 300px;
     }
   </style>
 </head>
 <body>
-  <div class="scoreboard">
-    <div class="player" id="player1">
-      <div class="name">Joueur 1</div>
-      <div class="score">0</div>
+  <div class="overlay-container">
+    <!-- Scoreboard personnalisé -->
+    <div class="scoreboard">
+      <div class="player" id="player1">
+        <div class="name">Joueur 1</div>
+        <div class="score">0</div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="player" id="player2">
+        <div class="name">Joueur 2</div>
+        <div class="score">0</div>
+      </div>
     </div>
-    <div class="vs">VS</div>
-    <div class="player" id="player2">
-      <div class="name">Joueur 2</div>
-      <div class="score">0</div>
+
+    <!-- Widget Battlefy -->
+    <div class="battlefy-widget">
+      <iframe src="https://battlefy.com/widget/tournament/xxxxxx" frameborder="0" scrolling="no"></iframe>
     </div>
   </div>
 
- <script>
-async function update() {
-  try {
-    const res = await fetch("data.json?cachebust=" + Date.now());
-    const data = await res.json();
+  <script>
+    async function update() {
+      try {
+        const res = await fetch("data.json?cachebust=" + Date.now());
+        const data = await res.json();
 
-    // Player 1
-    const p1 = document.querySelector('#player1');
-    p1.querySelector('.name').textContent = data.player1.name;
-    p1.querySelector('.score').textContent = data.player1.score;
-    p1.style.display = data.player1.visible ? 'flex' : 'none';
+        // Player 1
+        const p1 = document.querySelector('#player1');
+        p1.querySelector('.name').textContent = data.player1.name;
+        p1.querySelector('.score').textContent = data.player1.score;
+        p1.style.display = data.player1.visible ? 'flex' : 'none';
 
-    // Player 2
-    const p2 = document.querySelector('#player2');
-    p2.querySelector('.name').textContent = data.player2.name;
-    p2.querySelector('.score').textContent = data.player2.score;
-    p2.style.display = data.player2.visible ? 'flex' : 'none';
+        // Player 2
+        const p2 = document.querySelector('#player2');
+        p2.querySelector('.name').textContent = data.player2.name;
+        p2.querySelector('.score').textContent = data.player2.score;
+        p2.style.display = data.player2.visible ? 'flex' : 'none';
 
-    // VS
-    const vs = document.querySelector('.vs');
-    vs.style.display = data.vs.visible ? 'block' : 'none';
+        // VS
+        const vs = document.querySelector('.vs');
+        vs.style.display = data.vs.visible ? 'block' : 'none';
 
-  } catch (err) {
-    console.error("Erreur de chargement des données", err);
-  }
-}
+      } catch (err) {
+        console.error("Erreur de chargement des données", err);
+      }
+    }
 
-// Mise à jour immédiate + toutes les 5 secondes
-update();
-setInterval(update, 1000);
-</script>
+    update();
+    setInterval(update, 1000); // mise à jour toutes les 1s
+  </script>
 </body>
 </html>
